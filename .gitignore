@@ -35,3 +35,6 @@ video*.txt
 
 # Claude の作業ルール・設定・記録（commit しない。手元で使う）
 .claude/
+
+# macOS の Finder が作るファイル
+.DS_Store
