@@ -1,0 +1,11 @@
+# 配布資料（無断転載・第三者への開示が禁止されている）
+*.pdf
+
+# 提供データ（Google ドライブで共有。公開リポジトリへのコミット可否は質問フォームで確認するまで除外）
+pjt04_eval_dataset/
+PJT04_追加データ.json
+
+# スライドの出力物とビルド用の環境
+slides/dist/
+slides/.venv/
+slides/node_modules/
