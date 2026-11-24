@@ -1,0 +1,4 @@
+# Marp CLI の設定（./build.sh pdf が読む。VS Code の Marp 拡張は読まないので README を参照）
+# 2 段組みの <div class="columns"> を描くために html: true が必要
+html: true
+allowLocalFiles: true
