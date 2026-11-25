@@ -38,14 +38,19 @@ git fetch upstream
 本番の Lambda は Python 3.12 なので、手元も 3.12 にそろえる（CI は 3.13 で動くので、3.12 と 3.13 の両方で通る書き方をする）。
 
 ```bash
+cd ~/Desktop/GitHub_personal/lecture_slack_inspection   # リポジトリ直下（自分の置き場所に読み替える）
 brew install python@3.12
 python3.12 --version          # Python 3.12.x
 
 python3.12 -m venv .venv      # リポジトリ直下。.gitignore 済み
+ls .venv/bin/activate         # ファイルが表示されること
 source .venv/bin/activate
+which python                  # …/lecture_slack_inspection/.venv/bin/python と出ること
 python -m pip install -U pip
 python -m pip install -r requirements.txt pyyaml
 ```
+
+> macOS には `python` というコマンドが無い（`python3` だけ）。`python` が使えるのは **venv を有効にした後だけ**。`zsh: command not found: python` と出たら、venv が無い（`python3.12 -m venv .venv` を別のフォルダで実行した・失敗した）か、有効になっていない（新しいターミナルを開いた）。リポジトリ直下で `ls .venv/bin/activate` を確かめ、無ければ作り直し、あれば `source .venv/bin/activate` する。ターミナルを開き直すたびに `source .venv/bin/activate` が必要。
 
 - `requirements.txt`（直下）には、Lambda の依存（boto3・openai・requests・slack_sdk）とテスト用（pytest・pytest-mock・jsonschema）がそろっている
 - `pyyaml` は評価のデータ変換（`load_dataset.py`）で使う
