@@ -74,12 +74,14 @@ pytest tests/ -q
 
 ```bash
 cd evals
-npm install                       # package.json で promptfoo 0.120.19 に固定
+npm ci                            # package-lock.json のとおりに入れる（promptfoo 0.120.19）
 npx promptfoo --version           # 0.120.19
 cd ..
 ```
 
 ✅ 確認：バージョンが表示される。`evals/node_modules/` は `.gitignore` 済み（`git status` に出ない）。
+
+> `npm install` は使わない。新しい npm だと `package-lock.json` が書き換わり、`git status` に出る（出たら `git checkout -- evals/package-lock.json` で戻す）。`sharp` の install script についての警告は無視してよい（評価では使わない）。
 
 > `The current version of promptfoo 0.120.19 is lower than the latest available version …` という警告が出るが、**無視してよい**。評価の結果をそろえるため、`evals/package.json` で版を固定している。`npx promptfoo@latest` や `npm install -g promptfoo@latest` は実行しない。
 
@@ -198,7 +200,7 @@ gh pr create --base develop --title "chore: 最終課題の準備（LICENSE・RE
 
 - `CLAUDE.md` と `evals/README.md` の説明には、実装と食い違う部分がある（`CLAUDE.md` は単一の LLM 判定の説明、`evals/README.md` はデータが 258 件のまま）。**コードを正**として読む。文書の修正はガイド 10 でまとめて行う
 - venv を有効にし忘れると、システムの Python（3.9 など）で動いて依存が見つからない。プロンプトの先頭に `(.venv)` が出ているかを見る
-- `npm install` は `evals/` で行う（直下ではない）
+- `npm ci` は `evals/` で行う（直下ではない）
 
 ## 完了の条件
 
