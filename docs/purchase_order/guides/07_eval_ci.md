@@ -19,7 +19,7 @@
 
 - [03 ベースラインを測る](./03_baseline_evaluation.md) が終わっている
 - [05 改善を試す](./05_improvement_loop.md) の手順 1（`compare_runs.py`・`check_prompt_leak.py`）が入っている
-- `bedrock` ジョブを動かすには、GitHub Actions から講座の AWS の Bedrock を呼んでよいかの確認が要る（ガイド 01 の質問の一覧。**分からないうちは `offline` だけで完成**とする）
+- `bedrock` ジョブを動かすには、GitHub Actions から講座の AWS の Bedrock を呼んでよいかの確認が要る（ガイド 01 の手順 8 の質問の 2 番。**分からないうちは `offline` だけで完成**とする）
 
 ---
 
@@ -340,7 +340,7 @@ python -c "import yaml; yaml.safe_load(open('../../.github/workflows/eval.yml'))
 
 ### 6. AWS の認証を GitHub に渡す（`bedrock` ジョブを使う場合だけ）
 
-**先に、講座の AWS を GitHub Actions から呼んでよいか、どの方法ならよいかを確認する**（質問フォーム）。許可が無ければこの手順は飛ばし、手順 8 の「手元で回す」運用にする。
+**先に、講座の AWS を GitHub Actions から呼んでよいか、どの方法ならよいかを確認する**（ガイド 01 の手順 8 の質問の 2 番の回答）。許可が無ければこの手順は飛ばし、手順 8 の「手元で回す」運用にする。
 
 #### 6-1. OIDC（推奨。長期のキーを GitHub に置かない）
 

@@ -38,14 +38,19 @@ git fetch upstream
 本番の Lambda は Python 3.12 なので、手元も 3.12 にそろえる（CI は 3.13 で動くので、3.12 と 3.13 の両方で通る書き方をする）。
 
 ```bash
+cd ~/Desktop/GitHub_personal/lecture_slack_inspection   # リポジトリ直下（自分の置き場所に読み替える）
 brew install python@3.12
 python3.12 --version          # Python 3.12.x
 
 python3.12 -m venv .venv      # リポジトリ直下。.gitignore 済み
+ls .venv/bin/activate         # ファイルが表示されること
 source .venv/bin/activate
+which python                  # …/lecture_slack_inspection/.venv/bin/python と出ること
 python -m pip install -U pip
 python -m pip install -r requirements.txt pyyaml
 ```
+
+> macOS には `python` というコマンドが無い（`python3` だけ）。`python` が使えるのは **venv を有効にした後だけ**。`zsh: command not found: python` と出たら、venv が無い（`python3.12 -m venv .venv` を別のフォルダで実行した・失敗した）か、有効になっていない（新しいターミナルを開いた）。リポジトリ直下で `ls .venv/bin/activate` を確かめ、無ければ作り直し、あれば `source .venv/bin/activate` する。ターミナルを開き直すたびに `source .venv/bin/activate` が必要。
 
 - `requirements.txt`（直下）には、Lambda の依存（boto3・openai・requests・slack_sdk）とテスト用（pytest・pytest-mock・jsonschema）がそろっている
 - `pyyaml` は評価のデータ変換（`load_dataset.py`）で使う
@@ -69,12 +74,16 @@ pytest tests/ -q
 
 ```bash
 cd evals
-npm install                       # package.json で promptfoo 0.120.19 に固定
+npm ci                            # package-lock.json のとおりに入れる（promptfoo 0.120.19）
 npx promptfoo --version           # 0.120.19
 cd ..
 ```
 
 ✅ 確認：バージョンが表示される。`evals/node_modules/` は `.gitignore` 済み（`git status` に出ない）。
+
+> `npm install` は使わない。新しい npm だと `package-lock.json` が書き換わり、`git status` に出る（出たら `git checkout -- evals/package-lock.json` で戻す）。`sharp` の install script についての警告は無視してよい（評価では使わない）。
+
+> `The current version of promptfoo 0.120.19 is lower than the latest available version …` という警告が出るが、**無視してよい**。評価の結果をそろえるため、`evals/package.json` で版を固定している。`npx promptfoo@latest` や `npm install -g promptfoo@latest` は実行しない。
 
 ### 5. 評価データを置いて変換する
 
@@ -159,12 +168,22 @@ head -3 LICENSE
 
 ### 8. 発注者への質問を送る
 
-1. まず回答一覧（スプレッドシート）を開き、同じ質問がすでに答えられていないかを確認する
-2. 答えられていないものだけを質問フォームから送る。計画書 11 章の 3 点：
-   - Nova Micro / Lite 以外のモデル（例：Nova Pro、多言語の埋め込みモデル）を比較のために使ってよいか
-   - GitHub Actions から講座の AWS 環境の Bedrock を呼んでよいか（評価 CI 用。認証情報を GitHub の Secrets に置く形になる）
-   - 提供データ・追加データを公開リポジトリにコミットしてよいか
-3. 送った日と回答を、計画書の「改訂履歴」に 1 行ずつ書く
+確認したいことは**1 件の質問にまとめて**送る（計画書 11 章・ガイド 07・09 で確認が必要になる点を、1 つの本文に番号付きで並べる）。
+
+1. まず回答一覧（スプレッドシート）を開き、同じことがすでに答えられていないかを確認する
+2. 答えられている項目は本文から消す（番号は振り直す）。残った項目を、次の本文のまま質問フォームに貼って 1 件で送る
+
+```text
+PJT04 の進め方について、まとめて確認させてください。
+
+1. 比較のために、Nova Micro / Lite 以外のモデル（例：Nova Pro、多言語の埋め込みモデル）を使ってよいでしょうか。
+2. 評価の自動化（任意要件 O-5）のため、GitHub Actions から講座の AWS 環境の Bedrock を呼んでよいでしょうか。よい場合、認証の方法（IAM ロールを OIDC で使う／アクセスキーを GitHub の Secrets に置く）に指定はありますか。
+3. 提供された評価データ（354 件。追加データの 16 件を含む）を、公開リポジトリにコミットしてよいでしょうか。現在は .gitignore で除外しています。
+4. 任意要件 O-7 のため、講座の AWS 環境に CDK でスタック（API Gateway・Lambda・IAM ロールと IAM ユーザー・EventBridge）を作ってよいでしょうか。課題の終了後に削除が必要であれば、その時期も教えてください。
+```
+
+3. 回答を待つ間は、計画書 11 章の「不可なら」の進め方を前提に作業を進めてよい（質問には書かない）
+4. 送った日を、計画書の「改訂履歴」に 1 行で書く。回答が来たら、項目ごとの答えと、それで決まったこと（例：「2 は不可 → ガイド 07 は offline だけ」）を同じ表に書く
 
 ### 9. push と PR
 
@@ -181,7 +200,7 @@ gh pr create --base develop --title "chore: 最終課題の準備（LICENSE・RE
 
 - `CLAUDE.md` と `evals/README.md` の説明には、実装と食い違う部分がある（`CLAUDE.md` は単一の LLM 判定の説明、`evals/README.md` はデータが 258 件のまま）。**コードを正**として読む。文書の修正はガイド 10 でまとめて行う
 - venv を有効にし忘れると、システムの Python（3.9 など）で動いて依存が見つからない。プロンプトの先頭に `(.venv)` が出ているかを見る
-- `npm install` は `evals/` で行う（直下ではない）
+- `npm ci` は `evals/` で行う（直下ではない）
 
 ## 完了の条件
 

@@ -115,12 +115,14 @@ Slack ──→ API Gateway ──→ Lambda A（署名の確認・重複の確�
 
 ### B-1. 確認すること（先に）
 
+ガイド 01 の手順 8 の質問（4 番）で確認している。回答に従う。回答が無い・足りない点だけを、改めて質問する。
+
 - [ ] 講座の AWS に CloudFormation のスタックを作ってよいか（API Gateway・Lambda・IAM ロール・IAM ユーザー・EventBridge・CloudWatch Logs）
 - [ ] リージョン（`ap-northeast-1` でよいか）と、Bedrock のモデルの利用可否（ガイド 02 の手順 2）
 - [ ] `cdk bootstrap` が済んでいるか、自分で行ってよいか
 - [ ] 終わった後に消す必要があるか（`cdk destroy`）
 
-> スタックには、GAS 用の IAM ユーザーとアクセスキー（`OAuthAllowlistGasCallerUser`）が含まれる。講座の AWS で IAM ユーザーを作れない場合は、デプロイが失敗する。その場合は質問フォームで相談する（この部分を外してデプロイしてよいか）。
+> スタックには、GAS 用の IAM ユーザーとアクセスキー（`OAuthAllowlistGasCallerUser`）が含まれる。講座の AWS で IAM ユーザーを作れない場合は、デプロイが失敗する。その場合は、この部分を外してデプロイしてよいかを質問フォームで相談する。
 
 ### B-2. CDK の環境を用意する
 
