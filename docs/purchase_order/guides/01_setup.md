@@ -81,6 +81,8 @@ cd ..
 
 ✅ 確認：バージョンが表示される。`evals/node_modules/` は `.gitignore` 済み（`git status` に出ない）。
 
+> `The current version of promptfoo 0.120.19 is lower than the latest available version …` という警告が出るが、**無視してよい**。評価の結果をそろえるため、`evals/package.json` で版を固定している。`npx promptfoo@latest` や `npm install -g promptfoo@latest` は実行しない。
+
 ### 5. 評価データを置いて変換する
 
 提供データは `docs/purchase_order/pjt04_eval_dataset/` にある（`.gitignore` 済み）。評価用のフォルダ `evals/promptfoo/datasets/`（これも `.gitignore` 済み）へコピーして変換する。
